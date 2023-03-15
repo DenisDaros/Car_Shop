@@ -48,6 +48,12 @@ class MotorcycleService {
     }
     return null;
   }
+
+  public async updatedById(id: string, body: IMotorcycles) {
+    const motorcyclesODM = new MotorcyclesODM();
+    const motorcycles = await motorcyclesODM.update(id, body);
+    return this.createMotorcycleDomain(motorcycles);
+  }
 }
 
 export default MotorcycleService;

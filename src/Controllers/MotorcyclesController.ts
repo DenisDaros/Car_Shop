@@ -36,8 +36,8 @@ class MotorcycleController {
 
   public async getAllMotorcycles() {
     try {
-      const allCars = await this.service.getAllMotorcycles();
-      return this.res.status(200).json(allCars);
+      const allMotorcycle = await this.service.getAllMotorcycles();
+      return this.res.status(200).json(allMotorcycle);
     } catch (error) {
       this.next(error);
     }
@@ -48,10 +48,29 @@ class MotorcycleController {
     try {
       const Regex = /^[a-f\d]{24}$/i;
       if (!Regex.test(id)) return this.res.status(422).json({ message: 'Invalid mongo id' });
-      const car = await this.service.getMotorcyclesById(id);
-      if (!car) return this.res.status(404).json({ message: 'Motorcycle not found' });
+      const motorcycle = await this.service.getMotorcyclesById(id);
+      if (!motorcycle) return this.res.status(404).json({ message: 'Motorcycle not found' });
       
-      return this.res.status(200).json(car);
+      return this.res.status(200).json(motorcycle);
+    } catch (error) {
+      this.next(error);
+    }
+  }
+
+  public async updatedById() {
+    const motorcycleBody: IMotorcycle = {
+      ...this.req.body,
+    };
+    const { id } = this.req.params;
+    try {
+      const Regex = /^[a-f\d]{24}$/i;
+      if (!Regex.test(id)) return this.res.status(422).json({ message: 'Invalid mongo id' });
+
+      const motorcycle = await this.service.updatedById(id, motorcycleBody);
+      
+      if (!motorcycle) return this.res.status(404).json({ message: 'Motorcycle not found' });
+      
+      return this.res.status(200).json(motorcycle);
     } catch (error) {
       this.next(error);
     }
